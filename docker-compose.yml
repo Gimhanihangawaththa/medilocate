@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+  frontend:
+    build: ./medilocate_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    environment:
+      - REACT_APP_API_URL=http://backend:5000
+      - REACT_APP_IN_DOCKER=true
+    networks:
+      - medilocate-network
+
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/medilocate
+      - JWT_SECRET=your_jwt_secret_key_here
+      - NODE_ENV=development
+    depends_on:
+      - mongodb
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    restart: unless-stopped
+    command: npm run dev
+    networks:
+      - medilocate-network
+
+  mongodb:
+    image: mongo:5
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=medilocate
+    restart: unless-stopped
+    networks:
+      - medilocate-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  medilocate-network:
+    driver: bridge
