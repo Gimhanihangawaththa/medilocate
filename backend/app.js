@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 
-const authRoutes = require('./routes/auth');
+const authRoutes = require('./src/routes/auth');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const pharmacyRoutes = require('./routes/pharmacies');
+const pharmacyRoutes = require('./src/routes/pharmacies');
 app.use('/api/pharmacies', pharmacyRoutes);
 
 // Middleware - Configure CORS properly
