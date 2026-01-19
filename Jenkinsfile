@@ -53,59 +53,99 @@
 //         }
 //     }
 // }
+// pipeline {
+//     agent any
+
+//     stages {
+//         stage('Checkout Code') {
+//             steps {
+//                 git 'https://github.com/Gimhanihangawaththa/medilocate.git'
+//             }
+//         }
+
+//         stage('Login to Docker Hub') {
+//             steps {
+//                 withCredentials([usernamePassword(
+//                     credentialsId: 'dockerhub-creds',
+//                     usernameVariable: 'USER',
+//                     passwordVariable: 'PASS'
+//                 )]) {
+//                     sh 'echo "$PASS" | docker login -u "$USER" --password-stdin'
+//                 }
+//             }
+//         }
+
+//         stage('Build Backend Image') {
+//             steps {
+//                 sh 'docker build -t gimshi/medilocate_backend:latest ./backend'
+//             }
+//         }
+
+//         stage('Push Backend Image') {
+//             steps {
+//                 sh 'docker push gimshi/medilocate_backend:latest'
+//             }
+//         }
+
+//         stage('Build Frontend Image') {
+//             steps {
+//                 sh 'docker build -t gimshi/medilocate_frontend:latest ./frontend'
+//             }
+//         }
+
+//         stage('Push Frontend Image') {
+//             steps {
+//                 sh 'docker push gimshi/medilocate_frontend:latest'
+//             }
+//         }
+//     }
+
+//     post {
+//         success {
+//             echo "Docker images pushed successfully!"
+//         }
+//         failure {
+//             echo "There was an issue with building or pushing the Docker images."
+//         }
+//     }
+// }
 pipeline {
     agent any
+
+    environment {
+        DOCKERHUB_USERNAME = "gimshi"
+        IMAGE_NAME = "medilocate-backend"
+    }
 
     stages {
         stage('Checkout Code') {
             steps {
-                git 'https://github.com/Gimhanihangawaththa/medilocate.git'
+                git branch: 'main',
+                    url: 'https://github.com/Gimhanihangawaththa/medilocate.git'
             }
         }
 
-        stage('Login to Docker Hub') {
+        stage('Build Docker Image') {
+            steps {
+                sh '''
+                docker build -t $DOCKERHUB_USERNAME/$IMAGE_NAME:latest backend
+                '''
+            }
+        }
+
+        stage('Push to Docker Hub') {
             steps {
                 withCredentials([usernamePassword(
                     credentialsId: 'dockerhub-creds',
-                    usernameVariable: 'USER',
-                    passwordVariable: 'PASS'
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
                 )]) {
-                    sh 'echo "$PASS" | docker login -u "$USER" --password-stdin'
+                    sh '''
+                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                    docker push $DOCKERHUB_USERNAME/$IMAGE_NAME:latest
+                    '''
                 }
             }
-        }
-
-        stage('Build Backend Image') {
-            steps {
-                sh 'docker build -t gimshi/medilocate_backend:latest ./backend'
-            }
-        }
-
-        stage('Push Backend Image') {
-            steps {
-                sh 'docker push gimshi/medilocate_backend:latest'
-            }
-        }
-
-        stage('Build Frontend Image') {
-            steps {
-                sh 'docker build -t gimshi/medilocate_frontend:latest ./frontend'
-            }
-        }
-
-        stage('Push Frontend Image') {
-            steps {
-                sh 'docker push gimshi/medilocate_frontend:latest'
-            }
-        }
-    }
-
-    post {
-        success {
-            echo "Docker images pushed successfully!"
-        }
-        failure {
-            echo "There was an issue with building or pushing the Docker images."
         }
     }
 }
