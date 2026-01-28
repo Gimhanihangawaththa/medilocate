@@ -96,7 +96,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0077cc 0%, #0099ff 100%);
   padding: 20px;
 }
 
@@ -148,14 +148,14 @@
 
 .form-group input:focus {
   outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  border-color: #0077cc;
+  box-shadow: 0 0 0 3px rgba(0, 119, 204, 0.1);
 }
 
 .auth-button {
   width: 100%;
   padding: 15px;
-  background-color: #3498db;
+  background-color: #0077cc;
   color: white;
   border: none;
   border-radius: 6px;
@@ -167,7 +167,7 @@
 }
 
 .auth-button:hover {
-  background-color: #2980b9;
+  background-color: #005fa3;
 }
 
 .auth-switch {
@@ -177,7 +177,7 @@
 }
 
 .auth-link {
-  color: #3498db;
+  color: #0099ff;
   cursor: pointer;
   font-weight: 600;
   margin-left: 0.5rem;

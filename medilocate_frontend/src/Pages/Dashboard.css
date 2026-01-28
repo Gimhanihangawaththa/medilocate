@@ -145,7 +145,7 @@
 }
 
 .logout-btn {
-  background-color: #e74c3c;
+  background-color: #0099ff;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -156,7 +156,7 @@
 }
 
 .logout-btn:hover {
-  background-color: #c0392b;
+  background-color: #0077cc;
 }
 
 .dashboard-content {
@@ -219,7 +219,7 @@
 
 .medicine-form input:focus {
   outline: none;
-  border-color: #3498db;
+  border-color: #0077cc;
 }
 
 /* Pharmacies List */
@@ -246,7 +246,7 @@
   background: #f8f9fa;
   padding: 2rem;
   border-radius: 8px;
-  border-left: 4px solid #3498db;
+  border-left: 4px solid #0077cc;
   transition: transform 0.3s ease;
 }
 
