@@ -1,14 +1,19 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "description": "MediLocate Backend API",
-  "main": "src/app.js",
-   "scripts": {
+  "name": "medilocate-backend",
+  "version": "2.0.0",
+  "description": "MediLocate Backend API - Find Medicines in Nearby Pharmacies",
+  "main": "app.js",
+  "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "pharmacy",
+    "medicine",
+    "geolocation",
+    "api"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -16,6 +21,8 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
+    "express-rate-limit": "^7.5.1",
+    "joi": "^17.11.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.1"
   },

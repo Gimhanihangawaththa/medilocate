@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import Home from './Pages/Home';
+import SearchResults from './Pages/SearchResults';
+import AllMedicine from './Pages/AllMedicine';
+import PharmacyDetails from './Pages/PharmacyDetails';
+import MedicineDetails from './Pages/MedicineDetails';
+import Profile from './Pages/Profile';
+import Dashboard from './Pages/Dashboard';
 import Login from './components/Login';
 import Signup from './components/Signup';
-import Dashboard from './Pages/Dashboard';
+import PharmacySignup from './components/PharmacySignup';
+import PharmacyDashboard from './Pages/PharmacyDashboard';
+import ErrorPage from './Pages/ErrorPage';
 import './App.css';
 
 function App() {
@@ -32,6 +41,10 @@ function App() {
     localStorage.removeItem('user');
   };
 
+  const ProtectedRoute = ({ children }) => {
+    return user ? children : <Navigate to="/login" replace />;
+  };
+
   const switchToLogin = () => {
     // setCurrentView('login');
   };
@@ -40,38 +53,27 @@ function App() {
     // setCurrentView('signup');
   };
 
-  // If user is logged in, show dashboard
-  if (user) {
-    return (
-      <div className="App">
-        <BrowserRouter>
-          <Navbar onLogout={handleLogout} />
-          <Routes>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="*" element={<Navigate to="/dashboard" />} />
-          </Routes>
-        </BrowserRouter>
-      </div>
-    );
-  }
-
-  // If user is not logged in, show auth pages
   return (
-    <div className="App">
+    <div className="App min-h-screen flex flex-col bg-slate-50">
       <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home onNavigateToLogin={switchToLogin} onNavigateToSignup={switchToSignup} />} />
-          <Route 
-            path="/login" 
-            element={<Login onLogin={handleLogin} onSwitchToSignup={switchToSignup} />} 
-          />
-          <Route 
-            path="/signup" 
-            element={<Signup onSignup={handleLogin} onSwitchToLogin={switchToLogin} />} 
-          />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
+        <Navbar onLogout={handleLogout} />
+        <div className="flex-1">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/all-medicines" element={<AllMedicine />} />
+            <Route path="/search" element={<SearchResults />} />
+            <Route path="/pharmacy/:id" element={<PharmacyDetails />} />
+            <Route path="/medicine/:id" element={<MedicineDetails />} />
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/pharmacy-dashboard" element={<ProtectedRoute><PharmacyDashboard /></ProtectedRoute>} />
+            <Route path="/login" element={<Login onLogin={handleLogin} onSwitchToSignup={switchToSignup} />} />
+            <Route path="/signup" element={<Signup onSignup={handleLogin} onSwitchToLogin={switchToLogin} />} />
+            <Route path="/pharmacy-signup" element={<PharmacySignup onSignup={handleLogin} />} />
+            <Route path="*" element={<ErrorPage />} />
+          </Routes>
+        </div>
+        <Footer />
       </BrowserRouter>
     </div>
   );

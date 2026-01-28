@@ -4,7 +4,9 @@ import axios from 'axios';
 const isDocker = process.env.REACT_APP_IN_DOCKER === 'true';
 const API_BASE_URL = isDocker 
   ? process.env.REACT_APP_API_URL_DOCKER 
-  : process.env.REACT_APP_API_URL;
+  : process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+console.log('API Base URL:', API_BASE_URL); // Debug log
 
 const api = axios.create({
   baseURL: API_BASE_URL,

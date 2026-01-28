@@ -1,27 +1,50 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
 
-const authenticateToken = async (req, res, next) => {
+// Middleware to authenticate JWT token
+const authenticateToken = (req, res, next) => {
   try {
     const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
+    const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
 
     if (!token) {
-      return res.status(401).json({ message: 'Access token required' });
+      return res.status(401).json({
+        success: false,
+        message: 'Access token is missing'
+      });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret_key_here');
-    const user = await User.findById(decoded.userId).select('-password');
-    
-    if (!user) {
-      return res.status(401).json({ message: 'Invalid token' });
-    }
-
-    req.user = user;
+    req.user = decoded;
     next();
   } catch (error) {
-    res.status(403).json({ message: 'Invalid or expired token' });
+    return res.status(403).json({
+      success: false,
+      message: 'Invalid or expired token',
+      error: error.message
+    });
   }
 };
 
-module.exports = authenticateToken;
+// Middleware to check if user is pharmacy admin
+const isPharmacyAdmin = (req, res, next) => {
+  if (req.user.role !== 'pharmacy_admin' && req.user.role !== 'system_admin') {
+    return res.status(403).json({
+      success: false,
+      message: 'Only pharmacy admins can access this resource'
+    });
+  }
+  next();
+};
+
+// Middleware to check if user is system admin
+const isSystemAdmin = (req, res, next) => {
+  if (req.user.role !== 'system_admin') {
+    return res.status(403).json({
+      success: false,
+      message: 'Only system admins can access this resource'
+    });
+  }
+  next();
+};
+
+module.exports = { authenticateToken, isPharmacyAdmin, isSystemAdmin };
