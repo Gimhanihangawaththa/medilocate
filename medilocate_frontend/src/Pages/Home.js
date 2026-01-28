@@ -161,7 +161,7 @@ const Home = () => {
     }
 
     setIsSearching(true);
-    navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
+    navigate(`/all-medicines`);
     setTimeout(() => setIsSearching(false), 300);
   };
 

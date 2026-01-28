@@ -23,18 +23,18 @@ const PharmacyDashboard = () => {
   const fetchPharmacyInfo = async () => {
     try {
       const token = localStorage.getItem('token');
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
       
-      // Get pharmacy owned by this admin
-      const response = await api.get('/api/pharmacies', {
+      // Get owner's pharmacy
+      const response = await api.get('/api/pharmacies/owner/my-pharmacy', {
         headers: { Authorization: `Bearer ${token}` }
       });
       
-      const pharmacies = response.data.data || [];
-      if (pharmacies.length > 0) {
-        const pharmacy = pharmacies[0]; // Get first pharmacy owned by this admin
+      const pharmacy = response.data.data;
+      if (pharmacy) {
         setPharmacyId(pharmacy._id);
         fetchInventory(pharmacy._id);
+      } else {
+        console.error('No pharmacy found');
       }
     } catch (error) {
       console.error('Error fetching pharmacy:', error);

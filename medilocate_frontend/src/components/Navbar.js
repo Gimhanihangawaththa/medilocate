@@ -36,12 +36,6 @@ const Navbar = () => {
             >
               All Medicines
             </Link>
-            <Link
-              to="/search"
-              className="px-4 py-2 text-gray-200 hover:text-white hover:bg-slate-600 rounded-lg transition-all duration-200 font-medium"
-            >
-              Search
-            </Link>
             {isLoggedIn ? (
               <>
                 <Link

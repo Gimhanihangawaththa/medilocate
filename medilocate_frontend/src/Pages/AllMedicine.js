@@ -185,13 +185,21 @@ const AllMedicine = () => {
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
           {/* Search Bar */}
           <div className="mb-6">
-            <input
-              type="text"
-              placeholder="Search pharmacy name or medicines..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-            />
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Search pharmacy name or medicines..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="flex-1 px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+              />
+              <button
+                onClick={() => setSearchTerm(searchTerm)}
+                className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+              >
+                🔍 Search
+              </button>
+            </div>
           </div>
 
           {/* Filters Row */}

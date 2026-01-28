@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './Pages/Home';
-import SearchResults from './Pages/SearchResults';
 import AllMedicine from './Pages/AllMedicine';
 import PharmacyDetails from './Pages/PharmacyDetails';
 import MedicineDetails from './Pages/MedicineDetails';
@@ -61,7 +60,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/all-medicines" element={<AllMedicine />} />
-            <Route path="/search" element={<SearchResults />} />
             <Route path="/pharmacy/:id" element={<PharmacyDetails />} />
             <Route path="/medicine/:id" element={<MedicineDetails />} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />

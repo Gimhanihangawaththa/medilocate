@@ -228,3 +228,28 @@ exports.deletePharmacy = async (req, res, next) => {
     next(error);
   }
 };
+
+// Get owner's own pharmacy
+exports.getOwnerPharmacy = async (req, res, next) => {
+  try {
+    const pharmacy = await Pharmacy.findOne({ 
+      owner: req.user.userId,
+      isActive: true 
+    });
+
+    if (!pharmacy) {
+      return res.status(404).json({
+        success: true,
+        data: null,
+        message: 'No pharmacy found for this owner'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: pharmacy
+    });
+  } catch (error) {
+    next(error);
+  }
+};
