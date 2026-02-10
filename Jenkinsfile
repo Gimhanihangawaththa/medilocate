@@ -62,9 +62,17 @@ pipeline {
 
         stage('Deploy to EC2') {
             steps {
-                sshagent(['ec2-ssh-key']) {
+                withCredentials([
+                    sshUserPrivateKey(
+                        credentialsId: 'ec2-ssh-key',
+                        keyFileVariable: 'SSH_KEY',
+                        usernameVariable: 'SSH_USER'
+                    )
+                ]) {
                     sh '''
-                    ssh -o StrictHostKeyChecking=no ubuntu@13.232.196.109 << EOF
+                    chmod 600 $SSH_KEY
+
+                    ssh -o StrictHostKeyChecking=no -i $SSH_KEY $SSH_USER@13.232.196.109 << EOF
                       cd /home/ubuntu/medilocate
                       docker compose pull
                       docker compose down
