@@ -1,5 +1,3 @@
-
-
 pipeline {
     agent any
 
@@ -15,7 +13,6 @@ pipeline {
                     url: 'https://github.com/Gimhanihangawaththa/medilocate.git'
             }
         }
-
 
         stage('Build Backend Image') {
             steps {
@@ -40,7 +37,6 @@ pipeline {
             }
         }
 
-
         stage('Build Frontend Image') {
             steps {
                 sh '''
@@ -59,6 +55,21 @@ pipeline {
                     sh '''
                     echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                     docker push gimshi/medilocate-frontend:latest
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy to EC2') {
+            steps {
+                sshagent(['ec2-ssh-key']) {
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no ubuntu@13.232.196.109 << EOF
+                      cd /home/ubuntu/medilocate
+                      docker compose pull
+                      docker compose down
+                      docker compose up -d
+                    EOF
                     '''
                 }
             }
