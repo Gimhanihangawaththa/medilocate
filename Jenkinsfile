@@ -3,6 +3,8 @@ pipeline {
 
     environment {
         DOCKERHUB_USERNAME = "gimshi"
+        EC2_HOST = "13.232.196.109"
+        DEPLOY_DIR = "/home/ubuntu/medilocate"
     }
 
     stages {
@@ -16,9 +18,7 @@ pipeline {
 
         stage('Build Backend Image') {
             steps {
-                sh '''
-                docker build -t gimshi/medilocate-backend:latest ./backend
-                '''
+                sh 'docker build -t gimshi/medilocate-backend:latest ./backend'
             }
         }
 
@@ -30,8 +30,8 @@ pipeline {
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
                     sh '''
-                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                    docker push gimshi/medilocate-backend:latest
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker push gimshi/medilocate-backend:latest
                     '''
                 }
             }
@@ -39,9 +39,7 @@ pipeline {
 
         stage('Build Frontend Image') {
             steps {
-                sh '''
-                docker build -t gimshi/medilocate-frontend:latest ./medilocate_frontend
-                '''
+                sh 'docker build -t gimshi/medilocate-frontend:latest ./medilocate_frontend'
             }
         }
 
@@ -53,8 +51,8 @@ pipeline {
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
                     sh '''
-                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                    docker push gimshi/medilocate-frontend:latest
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker push gimshi/medilocate-frontend:latest
                     '''
                 }
             }
@@ -65,20 +63,14 @@ pipeline {
                 withCredentials([
                     sshUserPrivateKey(
                         credentialsId: 'ec2-ssh-key',
-                        keyFileVariable: 'SSH_KEY',
-                        usernameVariable: 'SSH_USER'
+                        keyFileVariable: 'SSH_KEY'
                     )
                 ]) {
-                    sh '''
-                    chmod 600 $SSH_KEY
-
-                    ssh -o StrictHostKeyChecking=no -i $SSH_KEY $SSH_USER@13.232.196.109 << EOF
-                      cd /home/ubuntu/medilocate
-                      docker compose pull
-                      docker compose down
-                      docker compose up -d
-                    EOF
-                    '''
+                    sh """
+                        chmod 600 $SSH_KEY
+                        ssh -o StrictHostKeyChecking=no -i $SSH_KEY ubuntu@$EC2_HOST \
+                        'cd $DEPLOY_DIR && docker compose pull && docker compose up -d'
+                    """
                 }
             }
         }
