@@ -16,7 +16,6 @@ pipeline {
             }
         }
 
-        /* ================= BACKEND ================= */
 
         stage('Build Backend Image') {
             steps {
@@ -41,7 +40,6 @@ pipeline {
             }
         }
 
-        /* ================= FRONTEND ================= */
 
         stage('Build Frontend Image') {
             steps {

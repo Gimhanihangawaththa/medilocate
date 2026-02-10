@@ -125,6 +125,9 @@ const pharmacySchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
+// Create 2dsphere index for geospatial queries
+pharmacySchema.index({ location: '2dsphere' });
+
 // Create geospatial index for location-based queries
 pharmacySchema.index({ 'location': '2dsphere' });
 pharmacySchema.index({ name: 'text', 'address.city': 'text' });

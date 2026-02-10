@@ -55,7 +55,7 @@ const medicineSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-// Create text index for medicine search
+// Create text index for search
 medicineSchema.index({ name: 'text', genericName: 'text', description: 'text' });
 medicineSchema.index({ category: 1 });
 

@@ -1,0 +1,30 @@
+# Ignore node_modules folder to avoid Docker copying it from the local machine
+node_modules/
+
+# Ignore logs or temporary files
+*.log
+*.tmp
+
+# Ignore environment files (optional: if you don't want to expose your .env file)
+.env
+
+# Ignore the .git folder to avoid copying the Git history
+.git/
+
+# Ignore Dockerfile (if you don't want it copied inside the image)
+Dockerfile
+
+# Ignore documentation files (optional)
+*.md
+
+# Ignore any test or build directories you don't want to include in the container
+tests/
+build/
+
+# Ignore any IDE/editor files (e.g., VS Code or JetBrains)
+.vscode/
+.idea/
+
+# Ignore system files
+.DS_Store
+Thumbs.db

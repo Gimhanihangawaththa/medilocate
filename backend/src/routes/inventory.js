@@ -9,7 +9,6 @@ router.get('/:pharmacyId/medicines', inventoryController.getPharmacyInventory);
 
 // Protected routes (pharmacy admin)
 router.post('/:pharmacyId/medicines', authenticateToken, isPharmacyAdmin, inventoryController.addInventory);
-router.get('/:pharmacyId', authenticateToken, isPharmacyAdmin, inventoryController.getPharmacyInventory);
 router.put('/:pharmacyId/medicines/:inventoryId', authenticateToken, isPharmacyAdmin, inventoryController.updateInventory);
 router.delete('/:pharmacyId/medicines/:inventoryId', authenticateToken, isPharmacyAdmin, inventoryController.removeInventory);
 

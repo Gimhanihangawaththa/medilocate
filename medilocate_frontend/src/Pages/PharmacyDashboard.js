@@ -44,7 +44,7 @@ const PharmacyDashboard = () => {
   const fetchInventory = async (pharmId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await api.get(`/api/inventory/${pharmId}`, {
+      const response = await api.get(`/api/inventory/${pharmId}/medicines`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setInventory(response.data.data || []);

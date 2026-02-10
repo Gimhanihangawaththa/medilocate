@@ -4,7 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
 
 // Routes
 const authRoutes = require('./src/routes/auth');
@@ -18,11 +18,13 @@ const { limiter } = require('./src/middleware/rateLimiter');
 
 // CORS Configuration
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://frontend:80', 'http://localhost:80'],
+  origin: [
+    'http://localhost:3000',
+    'http://13.232.196.109:3000'
+  ],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 
 // Body parser middleware
 app.use(express.json({ limit: '10mb' }));

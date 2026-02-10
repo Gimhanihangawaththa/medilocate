@@ -12,21 +12,17 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import PharmacySignup from './components/PharmacySignup';
 import PharmacyDashboard from './Pages/PharmacyDashboard';
+import SearchResults from './Pages/SearchResults';
 import ErrorPage from './Pages/ErrorPage';
 import './App.css';
 
 function App() {
-  const [user, setUser] = useState(null);
-  // const [currentView, setCurrentView] = useState('login');
-
-  useEffect(() => {
-    // Check if user is logged in on app load
+  const [user, setUser] = useState(() => {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
-    if (token && userData) {
-      setUser(JSON.parse(userData));
-    }
-  }, []);
+    return token && userData ? JSON.parse(userData) : null;
+  });
+  // const [currentView, setCurrentView] = useState('login');
 
   const handleLogin = (userData, token) => {
     setUser(userData);
@@ -65,6 +61,7 @@ function App() {
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/pharmacy-dashboard" element={<ProtectedRoute><PharmacyDashboard /></ProtectedRoute>} />
+            <Route path="/search" element={<ProtectedRoute><SearchResults /></ProtectedRoute>} />
             <Route path="/login" element={<Login onLogin={handleLogin} onSwitchToSignup={switchToSignup} />} />
             <Route path="/signup" element={<Signup onSignup={handleLogin} onSwitchToLogin={switchToLogin} />} />
             <Route path="/pharmacy-signup" element={<PharmacySignup onSignup={handleLogin} />} />
