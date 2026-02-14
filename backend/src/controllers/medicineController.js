@@ -1,11 +1,11 @@
 const Medicine = require('../models/Medicine');
 
-// Add new medicine (system admin only)
+
 exports.addMedicine = async (req, res, next) => {
   try {
     const { name, genericName, category, description, manufacturer, strength, unit, requiresPrescription } = req.body;
 
-    // Check if medicine already exists
+
     const existingMedicine = await Medicine.findOne({ name: name.toLowerCase() });
     if (existingMedicine) {
       return res.status(400).json({
@@ -37,7 +37,7 @@ exports.addMedicine = async (req, res, next) => {
   }
 };
 
-// Search medicines by name
+
 exports.searchMedicines = async (req, res, next) => {
   try {
     const { query, category, page = 1, limit = 20 } = req.query;
@@ -51,12 +51,12 @@ exports.searchMedicines = async (req, res, next) => {
 
     const filter = {};
 
-    // Text search
+
     if (query) {
       filter.$text = { $search: query };
     }
 
-    // Category filter
+
     if (category) {
       filter.category = category;
     }
@@ -86,7 +86,7 @@ exports.searchMedicines = async (req, res, next) => {
   }
 };
 
-// Get all medicines (with pagination)
+
 exports.getAllMedicines = async (req, res, next) => {
   try {
     const { category, page = 1, limit = 20 } = req.query;
@@ -119,7 +119,7 @@ exports.getAllMedicines = async (req, res, next) => {
   }
 };
 
-// Get single medicine
+
 exports.getMedicineById = async (req, res, next) => {
   try {
     const medicine = await Medicine.findById(req.params.id);
@@ -140,7 +140,7 @@ exports.getMedicineById = async (req, res, next) => {
   }
 };
 
-// Update medicine
+
 exports.updateMedicine = async (req, res, next) => {
   try {
     const medicine = await Medicine.findByIdAndUpdate(
@@ -166,7 +166,7 @@ exports.updateMedicine = async (req, res, next) => {
   }
 };
 
-// Delete medicine (soft delete)
+
 exports.deleteMedicine = async (req, res, next) => {
   try {
     const medicine = await Medicine.findByIdAndUpdate(

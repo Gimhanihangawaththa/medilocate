@@ -2,13 +2,13 @@ const Inventory = require('../models/Inventory');
 const Pharmacy = require('../models/Pharmacy');
 const Medicine = require('../models/Medicine');
 
-// Add medicine to pharmacy inventory
+
 exports.addInventory = async (req, res, next) => {
   try {
     const { pharmacyId } = req.params;
     const { medicineId, medicineName, quantity, price, batchNumber, expiryDate, lowStockThreshold } = req.body;
 
-    // Verify pharmacy exists and belongs to user
+
     const pharmacy = await Pharmacy.findById(pharmacyId);
     if (!pharmacy) {
       return res.status(404).json({
@@ -24,7 +24,7 @@ exports.addInventory = async (req, res, next) => {
       });
     }
 
-    // Handle medicine - either use ID or create from name
+
     let medicine;
     if (medicineId) {
       medicine = await Medicine.findById(medicineId);
@@ -56,7 +56,7 @@ exports.addInventory = async (req, res, next) => {
       });
     }
 
-    // Check if inventory already exists
+
     let inventory = await Inventory.findOne({ pharmacy: pharmacyId, medicine: medicine._id });
 
     if (inventory) {
@@ -88,13 +88,13 @@ exports.addInventory = async (req, res, next) => {
   }
 };
 
-// Update inventory (quantity, price, etc.)
+
 exports.updateInventory = async (req, res, next) => {
   try {
     const { pharmacyId, inventoryId } = req.params;
     const { quantity, price, batchNumber, expiryDate, lowStockThreshold } = req.body;
 
-    // Verify ownership
+
     const pharmacy = await Pharmacy.findById(pharmacyId);
     if (!pharmacy || (pharmacy.owner.toString() !== req.user.userId && req.user.role !== 'system_admin')) {
       return res.status(403).json({
@@ -135,7 +135,7 @@ exports.updateInventory = async (req, res, next) => {
   }
 };
 
-// Get pharmacy inventory
+
 exports.getPharmacyInventory = async (req, res, next) => {
   try {
     const { pharmacyId } = req.params;
@@ -144,7 +144,8 @@ exports.getPharmacyInventory = async (req, res, next) => {
     const filter = { pharmacy: pharmacyId };
 
     if (status) {
-      filter.status = status; // 'in_stock', 'low_stock', 'out_of_stock'
+      filter.status = status; 
+      
     }
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -171,7 +172,7 @@ exports.getPharmacyInventory = async (req, res, next) => {
   }
 };
 
-// Search medicine availability across all pharmacies
+
 exports.searchMedicineAvailability = async (req, res, next) => {
   try {
     const { medicineId, latitude, longitude, maxDistance = 5000, page = 1, limit = 20 } = req.query;
@@ -183,12 +184,12 @@ exports.searchMedicineAvailability = async (req, res, next) => {
       });
     }
 
-    // Build filter
+
     const filter = { medicine: medicineId, status: { $ne: 'out_of_stock' } };
 
     let pharmacyFilter = { isActive: true };
 
-    // Add geolocation filter if provided
+
     if (latitude && longitude) {
       pharmacyFilter.location = {
         $near: {
@@ -201,7 +202,7 @@ exports.searchMedicineAvailability = async (req, res, next) => {
       };
     }
 
-    // Get pharmacies with location filter
+
     const pharmacies = await Pharmacy.find(pharmacyFilter).select('_id');
     const pharmacyIds = pharmacies.map(p => p._id);
 
@@ -232,12 +233,12 @@ exports.searchMedicineAvailability = async (req, res, next) => {
   }
 };
 
-// Remove medicine from pharmacy inventory
+
 exports.removeInventory = async (req, res, next) => {
   try {
     const { pharmacyId, inventoryId } = req.params;
 
-    // Verify ownership
+
     const pharmacy = await Pharmacy.findById(pharmacyId);
     if (!pharmacy || (pharmacy.owner.toString() !== req.user.userId && req.user.role !== 'system_admin')) {
       return res.status(403).json({

@@ -36,9 +36,7 @@ jobs:
           push: true
           tags: gimshi/medilocate_frontend:latest
 
-      # ----------------------------
-      # DEPLOYMENT: TERRAFORM
-      # ----------------------------
+      
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
 

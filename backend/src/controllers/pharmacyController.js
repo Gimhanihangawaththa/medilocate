@@ -1,6 +1,6 @@
 const Pharmacy = require('../models/Pharmacy');
 
-// Add new pharmacy
+
 exports.addPharmacy = async (req, res, next) => {
   try {
     const {
@@ -12,7 +12,7 @@ exports.addPharmacy = async (req, res, next) => {
       operatingHours
     } = req.body;
 
-    // Check if pharmacy already exists
+
     const existingPharmacy = await Pharmacy.findOne({ registrationNumber });
     if (existingPharmacy) {
       return res.status(400).json({
@@ -27,10 +27,11 @@ exports.addPharmacy = async (req, res, next) => {
       address,
       location: {
         type: 'Point',
-        coordinates: location.coordinates // [longitude, latitude]
+        coordinates: location.coordinates 
+        
       },
       contact,
-      owner: req.user.userId, // From JWT token
+      owner: req.user.userId, 
       operatingHours: operatingHours || {}
     });
 
@@ -46,7 +47,7 @@ exports.addPharmacy = async (req, res, next) => {
   }
 };
 
-// Search pharmacies with geolocation
+
 exports.searchPharmacies = async (req, res, next) => {
   try {
     const { latitude, longitude, maxDistance = 5000, page = 1, limit = 20 } = req.query;
@@ -104,7 +105,7 @@ exports.searchPharmacies = async (req, res, next) => {
   }
 };
 
-// Get pharmacy by ID
+
 exports.getPharmacyById = async (req, res, next) => {
   try {
     const pharmacy = await Pharmacy.findById(req.params.id).populate('owner', 'email phone');
@@ -125,12 +126,12 @@ exports.getPharmacyById = async (req, res, next) => {
   }
 };
 
-// Update pharmacy
+
 exports.updatePharmacy = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    // Check if user owns this pharmacy
+
     const pharmacy = await Pharmacy.findById(id);
     if (!pharmacy) {
       return res.status(404).json({
@@ -146,7 +147,7 @@ exports.updatePharmacy = async (req, res, next) => {
       });
     }
 
-    // Handle location update
+
     if (req.body.location) {
       req.body.location = {
         type: 'Point',
@@ -170,7 +171,7 @@ exports.updatePharmacy = async (req, res, next) => {
   }
 };
 
-// Get all pharmacies
+
 exports.getAllPharmacies = async (req, res, next) => {
   try {
     const { page = 1, limit = 20 } = req.query;
@@ -199,7 +200,7 @@ exports.getAllPharmacies = async (req, res, next) => {
   }
 };
 
-// Delete pharmacy (soft delete)
+
 exports.deletePharmacy = async (req, res, next) => {
   try {
     const pharmacy = await Pharmacy.findById(req.params.id);
@@ -229,7 +230,7 @@ exports.deletePharmacy = async (req, res, next) => {
   }
 };
 
-// Get owner's own pharmacy
+
 exports.getOwnerPharmacy = async (req, res, next) => {
   try {
     const pharmacy = await Pharmacy.findOne({ 

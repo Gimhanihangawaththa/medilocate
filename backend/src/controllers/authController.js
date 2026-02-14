@@ -3,12 +3,12 @@ const jwt = require('jsonwebtoken');
 const Admin = require('../models/Admin');
 const User = require('../models/User');
 
-// Register new user
+
 exports.registerUser = async (req, res, next) => {
   try {
     const { username, email, password, fullName } = req.body;
 
-    // Check if user exists
+
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
     if (existingUser) {
       return res.status(400).json({
@@ -17,7 +17,7 @@ exports.registerUser = async (req, res, next) => {
       });
     }
 
-    // Hash password
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = new User({
@@ -29,7 +29,7 @@ exports.registerUser = async (req, res, next) => {
 
     await user.save();
 
-    // Generate token
+
     const token = jwt.sign(
       { userId: user._id, role: 'user' },
       process.env.JWT_SECRET || 'your_jwt_secret_key_here',
@@ -52,12 +52,12 @@ exports.registerUser = async (req, res, next) => {
   }
 };
 
-// Login user
+
 exports.loginUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    // Find user
+
     const user = await User.findOne({ email }).select('+password');
     if (!user) {
       return res.status(400).json({
@@ -66,7 +66,7 @@ exports.loginUser = async (req, res, next) => {
       });
     }
 
-    // Check password
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(400).json({
@@ -75,7 +75,7 @@ exports.loginUser = async (req, res, next) => {
       });
     }
 
-    // Generate token
+
     const token = jwt.sign(
       { userId: user._id, role: 'user' },
       process.env.JWT_SECRET || 'your_jwt_secret_key_here',
@@ -97,12 +97,12 @@ exports.loginUser = async (req, res, next) => {
   }
 };
 
-// Register pharmacy admin
+
 exports.registerPharmacyAdmin = async (req, res, next) => {
   try {
     const { username, email, password, pharmacyId } = req.body;
 
-    // Check if admin exists
+
     const existingAdmin = await Admin.findOne({ $or: [{ email }, { username }] });
     if (existingAdmin) {
       return res.status(400).json({
@@ -111,7 +111,7 @@ exports.registerPharmacyAdmin = async (req, res, next) => {
       });
     }
 
-    // Hash password
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const admin = new Admin({
@@ -124,7 +124,7 @@ exports.registerPharmacyAdmin = async (req, res, next) => {
 
     await admin.save();
 
-    // Generate token
+
     const token = jwt.sign(
       { userId: admin._id, role: 'pharmacy_admin' },
       process.env.JWT_SECRET || 'your_jwt_secret_key_here',
@@ -147,12 +147,12 @@ exports.registerPharmacyAdmin = async (req, res, next) => {
   }
 };
 
-// Login pharmacy admin
+
 exports.loginAdmin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    // Find admin
+
     const admin = await Admin.findOne({ email }).select('+password');
     if (!admin || !admin.isActive) {
       return res.status(400).json({
@@ -161,7 +161,7 @@ exports.loginAdmin = async (req, res, next) => {
       });
     }
 
-    // Check password
+
     const isPasswordValid = await bcrypt.compare(password, admin.password);
     if (!isPasswordValid) {
       return res.status(400).json({
@@ -170,11 +170,11 @@ exports.loginAdmin = async (req, res, next) => {
       });
     }
 
-    // Update last login
+
     admin.lastLogin = new Date();
     await admin.save();
 
-    // Generate token
+
     const token = jwt.sign(
       { userId: admin._id, role: admin.role },
       process.env.JWT_SECRET || 'your_jwt_secret_key_here',

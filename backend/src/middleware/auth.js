@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken');
 
-// Middleware to authenticate JWT token
+
 const authenticateToken = (req, res, next) => {
   try {
     const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+    const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
       return res.status(401).json({
@@ -25,7 +25,7 @@ const authenticateToken = (req, res, next) => {
   }
 };
 
-// Middleware to check if user is pharmacy admin
+
 const isPharmacyAdmin = (req, res, next) => {
   if (req.user.role !== 'pharmacy_admin' && req.user.role !== 'system_admin') {
     return res.status(403).json({
@@ -36,7 +36,7 @@ const isPharmacyAdmin = (req, res, next) => {
   next();
 };
 
-// Middleware to check if user is system admin
+
 const isSystemAdmin = (req, res, next) => {
   if (req.user.role !== 'system_admin') {
     return res.status(403).json({
