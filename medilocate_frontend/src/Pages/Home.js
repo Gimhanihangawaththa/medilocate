@@ -30,7 +30,7 @@ const Home = () => {
         <div className="absolute inset-0 bg-black opacity-10"></div>
         <div className="relative max-w-5xl mx-auto text-center">
           <h1 className="text-5xl md:text-6xl font-bold mb-6 animate-fade-in">
-            Welcome to Gimhani
+            Welcome to Medilocate
           </h1>
           <p className="text-xl md:text-2xl mb-12 text-blue-50">
             Find medicines at nearby pharmacies quickly and easily
