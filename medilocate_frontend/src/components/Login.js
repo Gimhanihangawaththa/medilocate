@@ -49,7 +49,7 @@ const Login = ({ onLogin, onSwitchToSignup }) => {
         <div className="bg-white rounded-2xl shadow-2xl p-8 space-y-6">
           {/* Header */}
           <div className="text-center">
-            <h2 className="text-4xl font-bold text-gray-800 mb-2">Sign In to MediLocate</h2>
+            <h2 className="text-4xl font-bold text-gray-800 mb-2">Sign In to Gimhani</h2>
             <p className="text-lg text-gray-600">Welcome back! Please enter your details</p>
           </div>
 
